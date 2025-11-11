@@ -7,7 +7,6 @@ RUN apt update && apt install -y git
 WORKDIR /app
 # COPY . /app/
 
-RUN git clone https://mosaadcode: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@github.com/mosaadcode/mfis_24.git .                          
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt     
 
