@@ -1,0 +1,54 @@
+{% extends base_template %}
+
+{% block content %}
+
+  <div class="container-fluid text-right  ">
+    <br>
+    {% if error %}
+    <div class="alert alert-danger text-center"  role="alert" >
+        {{ error }}
+    </div>
+    {% endif %}
+    {% if msg %}
+    <div class="alert alert-info text-center" role="alert">
+        {{ msg }}
+    </div>
+    {% endif %}
+    
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-10">
+
+            <form method="POST" class="form-signin">
+                {% csrf_token %}
+                    {% if form.mobile_number.value == None %}
+                    <input type="text" name="mobile_number" class="form-control mb-3" placeholder="هاتف محمول " required="" maxlength="14" id="id_mobile_number">            
+                    {% else %}      
+                    <input type="text" name="mobile_number" class="form-control mb-3" placeholder="هاتف محمول " required="" maxlength="14" id="id_mobile_number" value="{{ form.mobile_number.value }}" >                  
+                    {% endif %}
+                    {% if form.phone_number.value == None %}
+                    <input type="text" name="phone_number" class="form-control mb-3" placeholder="هاتف المنزل " required="" maxlength="13" id="phone_number">
+                    {% else %}
+                    <input type="text" name="phone_number" class="form-control mb-3" placeholder="هاتف المنزل " required="" maxlength="13" id="phone_number" value="{{ form.phone_number.value }}" >
+                    {% endif %}
+                    {% if form.emergency_phone.value == None %}
+                    <input type="text" name="emergency_phone" class="form-control mb-3" placeholder="هاتف طوارئ " maxlength="13" id="id_emergency_phone" >
+                    {% else %}
+                    <input type="text" name="emergency_phone" class="form-control mb-3" placeholder="هاتف طوارئ " maxlength="13" id="id_emergency_phone" value="{{ form.emergency_phone.value }}" >
+                    {% endif %}
+                    {% if form.email.value == None %}
+                    <input type="email" name="email" class="form-control mb-3" placeholder="البريد الإلكتروني " required="" maxlength="60" id="id_email">
+                    {% else %}
+                    <input type="email" name="email" class="form-control mb-3" placeholder="البريد الإلكتروني " required="" maxlength="60" id="id_email" value="{{ form.email.value}}" >
+                    {% endif %}
+                <div>
+                    <a class="text-left" href="{% url 'password_change' %}">تغير كلمة المرور</a>
+                </div>
+                <button type="submit" class="btn btn-block mt-4 btn-primary cib ">حفظ البيانات</button>
+
+            </form>
+        </div>
+    </div>
+  </div>
+
+
+{% endblock %}

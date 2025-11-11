@@ -1,0 +1,53 @@
+{% extends "student/base.html" %}
+
+{% block content %}
+  <div class="container-fluid text-right bg-light ">
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <!-- <div class="row justify-content-center mt-5">
+        <div class="col-md-5 text-center">
+            <h5>تسجيل الدخول</h5>
+        </div>
+    </div> -->
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-5">
+            {% if error %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endif %}
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="username">: كود الطالب</label>
+                    <input type="text" name="username" class="form-control" maxlength="7" id="username">
+                </div>
+                <div class="form-group">
+                    <label for="password">: كلمة المرور</label>
+                    <input type="password" name="password" class="form-control" id="password">
+                </div>
+                <br>
+                <button type="submit" class="btn ml-0 btn-primary cib ">تسجيل الدخول</button>
+            </form>
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+  </div>
+
+
+{% endblock %}

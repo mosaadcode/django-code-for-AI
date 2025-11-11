@@ -1,0 +1,99 @@
+{% extends 'student/base.html' %}
+
+{% block content %}
+
+<br>
+<div class="container-fluid text-right">
+  <div class="row justify-content-center mt-5">
+      <div class="col-md-5 ">
+          <h5> تسجيل ايصالات الدفع</h5>
+
+      </div>
+  </div>
+  <div class="row justify-content-center ">
+      <div class="col-md-5">
+          {% if error %}
+              <div class="alert alert-danger" role="alert">
+                  {{ error }}
+              </div>
+          {% endif %}
+          {% if msg %}
+              <div class="alert alert-info" role="alert">
+                  {{ msg }}
+              </div>
+          {% endif %}
+          <form method="POST" class="form-signin">
+              {% csrf_token %}
+                <!-- <br>
+                <select dir="rtl" name="year" required="" class="form-control" id="id_year">
+                  <option value="" selected="">العام الدراسي</option>
+                  <option value="21-20">21-20</option>
+                  <option value="22-21">22-21</option>
+                </select> -->
+
+                  <br>
+                  <select dir="rtl" name="kind" required="" class="form-control" id="id_kind">
+                    <option value="" selected="">مصروفات</option>
+                    <option value="دراسية">دراسية</option>
+                    <option value="سيارة">سيارة</option>
+                  </select>
+
+                  <br>
+                  <input type="number" name="value" min="0" class="form-control" placeholder="القيمة" equired="" id="id_value">
+                  <br>
+                  <select dir="rtl" name="bank_account" required=""  class="form-control" id="id_bank_account">
+                    <option value="" selected="">حساب الدفع</option>
+                    <option value="1903530354880500015">1903530354880500015</option>
+                    <option value="1903530635939400011">1903530635939400011</option>
+                    <option value="1903530776181400019">1903530776181400019</option>
+                    <option value="1903530635939300017">1903530635939300017</option>
+                    <option value="1903530709961400015">1903530709961400015</option>
+                  </select>
+                  <br>
+                  <div>
+                    <h6>تاريخ الدفع بالبنك</h6>
+                   </div>
+                   <input type="date"  name="payment_date" required="" placeholder="تاريخ الدفع بالبنك"
+                    class="form-control" id="id_payment_date">
+                  {% comment %} <input type="text"  name="payment_date" required="" placeholder="تاريخ الدفع بالبنك" onfocus="(this.type='date')"
+                  onblur="(this.type='text')" class="form-control" id="id_payment_date"> {% endcomment %}
+              <!-- </div> -->
+              <br>
+              <button type="submit" class="btn btn-primary btn-block cib">تسجيل ايصال الدفع</button>
+          </form>
+
+      </div>
+  </div>
+</div>
+<!-- <br>
+<br>
+<div class="container-fluid ">
+  <div class="row ">
+    <div class="col-md-8  ">
+    </div>
+    <div class="col-md-4  text-right">
+      <h6>عمليات السداد السابقة</h6>
+    </div>
+  </div>
+  <div class="row "
+  <div class="col-md-7 ">
+  </div>
+    <div class="col-md-5 ml-auto text-center ">
+  		<table class="table table-hover">
+  		  <thead>
+  		    <tr>
+  		      <th scope="col">تاريخ التسجيل</th>
+            <th scope="col">المبلغ</th>
+  		    </tr>
+  		  </thead>
+  		  <tbody>
+           {% for fees in feess %}
+  		    <tr>
+  		      <td>{{ fees.created }}</td>
+            <th scope="row">{{ fees.value }}</th>
+           {% endfor %}
+  		  </tbody>
+  		</table>
+    </div>
+</div> -->
+{% endblock %}

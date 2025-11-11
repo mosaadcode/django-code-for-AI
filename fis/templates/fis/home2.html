@@ -1,0 +1,117 @@
+{% extends "fis/base2.html" %}
+
+{% block content %}
+<div class="container-fluid ">
+    <br>
+    <br>
+    <div class="alert alert-danger text-center" role="alert" id="show_error" style="display: none;">
+        لم يتم العثور على الكود برجاء التحقق من الرقم القومي ثم مراجعة شئون العاملين
+    </div>
+
+    <div class="alert alert-info text-center" role="alert" id="show_msg" style="display: none;">
+        برجاء حفظ الكود ثم اضغط تسجيل الدخول وتغير كلمة المرور من صفحة البيانات لتأمين حسابك
+    </div>
+
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-5">
+            {% if error %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endif %}
+            <form method="POST" class="form-signin">
+                {% csrf_token %}
+                <div class="form-group">
+                    <input type="text" name="username" class="form-control" maxlength="7" placeholder="code"id="username">
+                </div>
+                <div class="form-group">
+                    <input type="password" name="password" class="form-control" placeholder="password" id="password">
+                </div>
+                <br>
+                <button type="submit" class="btn btn-block ml-0 btn-primary fis ">Log in</button>
+
+                <div id="card-434025">  
+                    <div class="card border-0">
+                        <div class="card-header">
+                            <a class="card-link collapsed" data-toggle="collapse" data-parent="#card-434025" href="#card-element-708669">employees</a>
+                        </div>
+                        <div id="card-element-708669" class="collapse bg-transparent">
+                            <div class="card-body">
+                                    <div class="form-group">
+                                        <input type="text" name="na_id" class="form-control text-center" maxlength="14" placeholder="National ID" id="na_id">
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="button" class="btn btn-primary fis" id="getcode">Search</button>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function() {
+    const myInput = document.getElementById('getcode');
+    myInput.addEventListener("click", getCode);
+  
+    async function makeRequest(url,method,body) {
+      let headers = {
+        'X-Requested-With': 'XMLHttpRequest',
+        'Content-Type': 'application/json'
+      }
+  
+      if (method == 'post') {
+        const csrf = document.querySelector('[name=csrfmiddlewaretoken]').value
+        headers['X-CSRFToken'] = csrf
+      }
+      let response = await fetch('',{
+        method: method,
+        headers: headers,
+        body:body
+      })
+  
+      return await response.json()
+    }
+  
+    async function getCode(e) {
+    //   console.log(e.target.value)
+  
+      let usercode = document.getElementById('username')
+      let userpass = document.getElementById('password')    
+      let card = document.getElementById('card-element-708669')    
+      let na_id = document.getElementById('na_id').value
+      let msg = document.getElementById('show_msg')
+      let error = document.getElementById('show_error')
+  
+      let data = await makeRequest('/',method='post',body=JSON.stringify({'na_id':na_id}))
+  
+      code = await data ['code']
+      if( code != 0) {
+          usercode.value = await data ['code']
+          userpass.value = await data ['code']
+          card.classList.remove('show');
+          error.style.display="none";
+          msg.style.display="block";
+       }else{
+        usercode.value = ""
+          userpass.value = ""
+        msg.style.display="none";
+        error.style.display="block";
+    
+    }
+  
+    }
+  
+    });
+
+    </script>
+
+
+{% endblock %}

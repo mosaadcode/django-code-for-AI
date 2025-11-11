@@ -1,0 +1,68 @@
+{% extends base_template %}
+
+{% block content %}
+{% load static %}
+	<link rel="stylesheet" href="{% static '/css/base.css' %}">
+	<br>
+	{% if error %}
+    <div class="alert alert-danger text-center"  role="alert" >
+        {{ error }}
+    </div>
+    {% endif %}
+    {% if msg %}
+    <div class="alert alert-info text-center" role="alert">
+        {{ msg }}
+    </div>
+    {% endif %}
+	
+	<div class="container-fluid text-right  ">
+		<br>
+			<div class="row">
+				<div class="col-md-7">
+				</div>
+				<div class="col-md-5">
+					<div class="card text-right border-black ">
+						<h6 class="card-header">
+				
+                            <!-- <i class="fa fa-spinner fa-spin fa-x fa-fw"></i></i>مرحباً -->
+                        السلام عليكم
+						</h6>
+						<div class="card-body ">
+							<h6 class="card-text">
+								{{ emp.name }}
+							</h6>
+						</div>
+						<div class="card-footer ">
+					<h6>   {{ emp.job}} - {{ emp.school }} </h6>
+						</div>
+					</div>
+				</div>
+			</div>
+            <br>
+			<div class="row">
+				<div class="col-md-6">
+				</div>
+			{% if emp.message == null %}
+			<div class="col-md-6">
+				</div>
+			{% else %}
+				<div class="col-md-6">
+					<div class="alert alert-dismissable alert-primary">
+
+						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+							×
+						</button>
+						<h6>
+							<!-- بريد -->
+						</h6>{{ emp.message|safe }}
+					</div>
+				</div>
+			{% endif %}
+
+		</div>
+        <!-- Video Section -->
+		<div class="video-container mt-3">
+			<iframe src="https://boys1-mfis.wistia.com/medias/pmlfzi9m5k" width="360" height="820" frameborder="0" allowfullscreen></iframe>
+		  </div>
+
+{% endblock %}

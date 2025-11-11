@@ -1,0 +1,74 @@
+{% extends 'fis/base2.html' %}
+
+{% block content %}
+
+
+<!-- <div class="container-fluid  text-right">
+  <div class="row justify-content-center mt-5"> -->
+
+<div class="container-fluid">
+
+
+
+  <br>
+  <br>
+  <div class="row ">
+    <div class="col-md-4  mb-3 text-left">
+      <h6><b>Payments History</b></h6>
+    </div>
+    <div class="col-md-8  ">
+    </div>
+  </div>
+
+  <div class="row">
+  <div class="col-md-5 ">
+  </div>
+    <div class="col-md-7 ml-auto text-center">
+  		<table class="table table-hover">
+  		  <thead>
+  		    <tr>
+            <th scope="col">Payment</th>
+  		      <th scope="col">Value</th>
+            <th scope="col">Date</th>
+            <th scope="col">Verified</th>
+  		    </tr>
+  		  </thead>
+  		  <tbody>
+           {% for fee in fees %}
+  		    <tr>
+            {% if fee.kind == "دراسية" %}
+            <td>Study</td>
+            {% elif fee.kind == "سيارة" %}
+            <td>Bus</td>
+            {% else %}
+            <td>{{ fee.kind }}</td>
+            {% endif %}
+            <th scope="row">{{ fee.value }}</th>
+            <td>{{ fee.payment_date }}</td>
+            <td>
+              {% if fee.invoice_link %}
+                <a href="{{ fee.invoice_link }}" target="_blank">
+              {% endif %}
+              {% if fee.verified %}
+                <i class="fa fa-check" aria-hidden="true"></i>
+              {% else %}
+                checking 
+              {% endif %} 
+              {% if fee.invoice_link %}
+                </a>
+              {% endif %}
+            </td>
+           {% endfor %}
+  		  </tbody>
+  		</table>
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+</div>
+
+{% endblock %}

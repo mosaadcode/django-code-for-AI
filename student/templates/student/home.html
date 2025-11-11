@@ -1,0 +1,131 @@
+{% extends "student/base.html" %}
+
+{% block content %}
+<div class="container-fluid text-right">
+    <br>
+    <br>
+    <div class="alert alert-danger text-center" role="alert" id="show_error" style="display: none;">
+        لم يتم العثور على الكود برجاء التحقق من الرقم القومي
+    </div>
+
+    <div class="alert alert-info text-center" role="alert" id="show_msg" style="display: none;">
+        كلمة المرور هي نفس الكود الظاهر أمامك, انظر إليه جيدًا واحفظه لاستخدامه لاحقًا ثم اضغط تسجيل الدخول
+    </div>
+
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-5">
+            {% if error %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endif %}
+            <form method="POST" class="form-signin">
+                {% csrf_token %}
+                <div class="form-group">
+                    <input type="text" name="username" class="form-control" maxlength="7" placeholder="الكود"id="username">
+                </div>
+                <div class="form-group">
+                    <input type="password" name="password" class="form-control" placeholder="كلمة المرور" id="password">
+                </div>
+                <br>
+                <button type="submit" class="btn btn-block ml-0 btn-primary cib ">تسجيل الدخول</button>
+
+                <div id="card-434025">  
+                    <div class="card border-0">
+                        <div class="card-header">
+                            <a class="card-link collapsed" data-toggle="collapse" data-parent="#card-434025" href="#card-element-708669"> استعلام عن الكود</a>
+                        </div>
+                        <div id="card-element-708669" class="collapse bg-transparent">
+                            <div class="card-body">
+                                    <div class="form-group">
+                                        <input type="text" name="na_id" class="form-control text-center" maxlength="14" placeholder="الرقم القومي" id="na_id">
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="button" class="btn btn-primary cib" id="getcode">استعلام</button>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    {% comment %} <footer class="footer">
+        <div class="container text-center">
+          <div class="row">
+              <div class="col-md-6">
+                <p class="text-muted">شئون طلبة بنين: <a href="tel:01000420308">01000420308</a></p>
+                <p class="text-muted">شئون طلبة بنات: <a href="tel:01000420309">01000420309</a></p>
+              </div>
+            <div class="col-md-6">
+              <p class="text-muted">حسابات بنين: <a href="tel:01028879939">01028879939</a></p>
+              <p class="text-muted">حسابات بنات: <a href="tel:01002119519">01002119519</a></p>
+            </div>
+          </div>
+        </div>
+      </footer> {% endcomment %}
+
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function() {
+    const myInput = document.getElementById('getcode');
+    myInput.addEventListener("click", getCode);
+  
+    async function makeRequest(url,method,body) {
+      let headers = {
+        'X-Requested-With': 'XMLHttpRequest',
+        'Content-Type': 'application/json'
+      }
+  
+      if (method == 'post') {
+        const csrf = document.querySelector('[name=csrfmiddlewaretoken]').value
+        headers['X-CSRFToken'] = csrf
+      }
+      let response = await fetch('',{
+        method: method,
+        headers: headers,
+        body:body
+      })
+  
+      return await response.json()
+    }
+  
+    async function getCode(e) {
+    //   console.log(e.target.value)
+  
+      let usercode = document.getElementById('username')
+      let userpass = document.getElementById('password')    
+      let card = document.getElementById('card-element-708669')    
+      let na_id = document.getElementById('na_id').value
+      let msg = document.getElementById('show_msg')
+      let error = document.getElementById('show_error')
+  
+      let data = await makeRequest('/',method='post',body=JSON.stringify({'na_id':na_id}))
+  
+      code = await data ['code']
+      if( code != 0) {
+          usercode.value = await data ['code']
+          userpass.value = await data ['code']
+          card.classList.remove('show');
+          error.style.display="none";
+          msg.style.display="block";
+       }else{
+        usercode.value = ""
+          userpass.value = ""
+        msg.style.display="none";
+        error.style.display="block";
+    
+    }
+  
+    }
+  
+    });
+
+    </script>
+
+
+{% endblock %}

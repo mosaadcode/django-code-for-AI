@@ -1,0 +1,157 @@
+{% extends "student/base.html" %}
+
+{% block content %}
+
+  <div class="container-fluid text-right  ">
+    <br>
+{% if error == 'برجاء تحديث البيانات التالية' %}
+    <div class="row">
+        <div class="col-md-7">
+        </div>
+        <div class="col-md-5">
+            <div class="card text-right border-black ">
+                <h6 class="card-header">
+          {% if user.school == "بنين" %}
+           مرحباً بالطالب
+          {% else %}
+           مرحباً بالطالبة
+          {% endif %}
+                </h6>
+                <div class="card-body ">
+                    <h6 class="card-text">
+                        {{ user.username }}
+                    </h6>
+                </div>
+                <div class="card-footer ">
+            {{ user.get_grade_display }} - {{ user.school }}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% comment %} <div class="alert alert-danger" role="alert">
+        {{ "يرجى تحديث البيانات  ." }}
+    </div> {% endcomment %}
+    {% endif %}
+    <br>
+    {% if error %}
+    <div class="alert alert-danger text-center"  role="alert" >
+        {{ error }}
+    </div>
+    {% endif %}
+    {% if msg %}
+    <div class="alert alert-info text-center" role="alert">
+        {{ msg }}
+    </div>
+    {% endif %}
+    <!-- <form method="POST" class="form-signin"> -->
+        <div class="row justify-content-center mt-4">
+            <div class="col-md-10">
+            <form method="POST" class="form-signin w-100" dir="rtl">
+            {% csrf_token %}
+             <p>بيانات الأب</p>
+            <input type="text" name="father_id" class="form-control form-control-sm mb-2" placeholder='الرقم القومي' required="" maxlength="14" id="id_father_id">
+            <input type="text" name="father_job" class="form-control mb-2" placeholder="الوظيفة" required="" maxlength="46" id="id_father_job">
+            <input type="text" name="father_mobile" class="form-control mb-2" placeholder="هاتف محمول" required="" maxlength="14" id="id_father_mobile">
+
+            <span id="emailValidationMessage"></span>
+            <input type="text" name="email" class="form-control mb-3" placeholder="بريد إلكتروني" required="" maxlength="36" id="id_email" onblur="validateEmail(this.value)">
+
+            <p>بيانات الاَم</p>
+            <input type="text" name="mother_job" class="form-control mb-2" placeholder="الوظيفة" required="" maxlength="46" id="id_mother_job">
+            <input type="text" name="mother_mobile" class="form-control mb-2" placeholder="هاتف محمول" required="" maxlength="13" id="id_mother_mobile">
+            <span id="emailValidationMessage2"></span>
+            <input type="text" name="email2" class="form-control mb-2" placeholder="بريد إلكتروني" required="" maxlength="36" id="id_email2" onblur="validateEmail(this.value)">
+            <input type="text" name="phone_number" class="form-control mb-2" placeholder="هاتف المنزل" required="" maxlength="13" id="id_phone_number">
+            <input type="text" name="phone_number2" class="form-control mb-2" placeholder="هاتف بديل" required="" maxlength="13" id="id_phone_number2">
+            <input type="text" name="address_1" class="form-control mb-3" placeholder="العنوان بالتفصيل" required="" maxlength="86" id="id_address_1">
+            <div class="row">
+                <div class="col-7 mb-3">
+                    <p>ترتيب الطالب بين إخوته</p>
+                </div>
+                <div class="col-5">
+                    {{ form.student_order }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-7 mb-3">
+                    <p>حالة الوالدين</p>
+                </div>
+                <div class="col-5">
+                    {{ form.parents_status }}
+                </div>
+            </div>
+            <input type="text" name="student_with" class="form-control  mb-4  ml-1" placeholder="يتواجد الطالب مع" required="" maxlength="12" id="id_student_with">
+            <p>أشخاص يمكن الاتصال بهم حال الطوارئ</p>
+            <div class="row">
+                <div class="col-6">
+                    <input type="text" name="sos_name1" class="form-control mb-2" placeholder="إسم" required="" maxlength="46" id="id_sos_name1">
+                </div>
+                <div class="col-6">
+                    <input type="text" name="sos_phone1" class="form-control mb-2" placeholder="هاتف" required="" maxlength="13" id="id_sos_phone1">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <input type="text" name="sos_name2" class="form-control mb-2" placeholder="إسم" required="" maxlength="46" id="id_sos_name2">
+                </div>
+                <div class="col-6">
+                    <input type="text" name="sos_phone2" class="form-control mb-4" placeholder="هاتف" required="" maxlength="13" id="id_sos_phone2">
+                </div>
+            </div>
+
+            <p>أسماء الأخوة بمدرسة منارة الفاروق</p>
+            
+            <div class="row">
+                <div class="col-6">
+                    <input type="text" name="brother1_name" class="form-control mb-2  ml-1" placeholder="إسم"  maxlength="46" id="id_brother1_name">
+                </div>
+                <div class="col-6">
+                    {{ form.brother1_grade }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <input type="text" name="brother2_name" class="form-control mb-2  ml-1" placeholder="إسم"  maxlength="46" id="id_brother2_name">
+                </div>
+                <div class="col-6">
+                    {{ form.brother2_grade }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <input type="text" name="brother3_name" class="form-control mb-2  ml-1" placeholder="إسم"  maxlength="46" id="id_brother3_name">
+                </div>
+                <div class="col-6">
+                    {{ form.brother3_grade }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <input type="text" name="brother4_name" class="form-control mb-2  ml-1" placeholder="إسم"  maxlength="46" id="id_brother4_name">
+                </div>
+                <div class="col-6">
+                    {{ form.brother4_grade }}
+                </div>
+            </div>
+        
+                    <button type="submit" class="form-control cib text-center">تسجيل</button>
+                      </form>  
+        
+            </div>
+        </div>
+
+        <script>
+            function validateEmail(email) {
+              var regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+              var isValid = regex.test(email);
+            
+              var validationMessage = document.getElementById("emailValidationMessage");
+              
+              if (isValid) {
+                validationMessage.innerHTML ='<i class="fa fa-check text-success" aria-hidden="true"></i>';
+              } else {
+                validationMessage.innerHTML ='<i class="fa fa-times text-danger" aria-hidden="true"></i>';
+              }
+            }
+            </script>
+  {% endblock %}

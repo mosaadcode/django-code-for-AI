@@ -1,0 +1,62 @@
+{% load static %}
+    <nav class="navbar  p-1 navbar-expand-md fis navbar-dark sticky-top ">
+      <a href="#" class=" m-0"><img src="{% static '/images/fis_logo.png' %}" height="70" alt="FIS"></a>
+      <a class="navbar-brand m-0 ml-1 ml-2" href="#">Alfarouk International School</a>
+      <button class="navbar-toggler navbar-toggler-right mr-1" type="button" data-toggle="collapse" data-target="#navb" aria-expanded="true">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div id="navb" class="navbar-collapse collapse hide text-right">
+        <ul class="navbar-nav ml-auto mr-2">
+                {% url 'contact' as contact_url1 %}
+                {% url 'application' as application_url1 %}
+                {% if user.is_authenticated %}
+                {% if user.is_employ == False %}
+                {% if request.get_full_path != contact_url1 and  request.get_full_path != application_url1 %}
+                <li class="nav-item">
+                  <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'fis_payments' %}">Payments History</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'agreement' %}">Bus subscription</a>
+                  </li>
+                  <li class="nav-item">
+                      <a href="#" onclick="$('#signOutBtn').click()" class="nav-link"><i class="fa fa-sign-out mr-2"></i>Log out</a>
+                      <form style='display: none;' method="POST" action="{% url 'fis_logoutuser' %}">
+                          {% csrf_token %}
+                          <button id="signOutBtn" type="submit">Log out</button>
+                      </form>
+                  </li>
+                  {% endif %}
+                  {% else %}
+                  <li class="nav-item">
+                    <li class="nav-item active">
+                      <a class="nav-link" href="{% url 'perm' %}">اُذوني</a>
+                    </li>
+                    <li class="nav-item active">
+                      <a class="nav-link" href="{% url 'vacation' %}">إجازاتي</a>
+                    </li>
+                    <li class="nav-item active">
+                      <a class="nav-link" href="{% url 'employee_contact' %}">بياناتي</a>
+                    </li>
+                    <li class="nav-item active">
+                      <a class="nav-link" href="{% url 'salary' %}">راتبي</a>
+                    </li>
+                    <li class="nav-item active">
+                      <a class="nav-link" href="{% url 'home2' %}">رئيسية</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="#" onclick="$('#signOutBtn').click()" class="nav-link"><i class="fa fa-sign-out mr-2"></i>خروج</a>
+                        <form style='display: none;' method="POST" action="{% url 'fis_logoutuser' %}">
+                            {% csrf_token %}
+                            <button id="signOutBtn" type="submit">  تسجيل خروج  </button>
+                        </form>
+                    </li>
+                  {% endif %}
+                  {% endif %}
+        </ul>
+      </div>
+    </nav>

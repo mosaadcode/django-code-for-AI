@@ -1,0 +1,123 @@
+{% extends 'student/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5" dir="rtl">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <!-- Agreement Collapse -->
+      <div class="card shadow-sm mb-4 text-right">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">
+            <button class="btn btn-link text-dark w-100 text-right" data-toggle="collapse" data-target="#agreementCollapse"  >
+              <i class="fas fa-file-alt ml-2"></i> تعليمات الإشتراك في سيارة المدرسة
+              <i class="fas fa-chevron-down float-left flip-horizontal"></i>
+            </button>
+          </h5>
+        </div>
+        <div id="agreementCollapse" class="collapse">
+          <div class="card-body text-center p-0">
+            <img src="{% static 'images/agrement-s.jpg' %}" class="img-fluid rounded" alt="اتفاقية النقل المدرسي">
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Card -->
+      <div class="card shadow-sm border-0 text-right" style="background-color: transparent;">
+        <div class="card-body p-4">
+          {% if error %}
+          <div class="alert alert-danger alert-dismissible fade show text-right" role="alert">
+            {{ error }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          {% endif %}
+
+          <form method="POST" class="needs-validation" novalidate>
+            {% csrf_token %}
+            
+            <!-- Address Field -->
+            <div class="form-group mb-4 text-right">
+              <div class="input-group-append mb-2">
+                <span class="input-group-text bg-light"><i class="fas fa-home"> عنوان المنزل </i></span>
+              </div>
+              <div class="input-group">
+                {{ form.address }}
+              </div>
+            </div>
+            <!-- Living Area Field -->
+            <div class="form-group mb-4 text-right">
+              <div class="input-group">
+                {{ form.living_area }}
+              </div>
+            </div>
+
+
+            <!-- Submit Button -->
+            <div class="form-group mt-5 text-right">
+              <button type="submit" class="btn btn-primary cib btn-block py-3">
+                <i class="fas fa-check-circle ml-2"></i> أوافق على التعليمات وأريد التسجيل
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Help Text -->
+      <div class="text-center mt-4 text-muted" dir="rtl">
+        <p class="small">لأي استفسارات، يرجى التواصل مع إدارة النقل المدرسي على الرقم 0123456789</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* RTL Adjustments */
+  body {
+    text-align: right;
+  }
+  
+  #id_living_area, #id_address {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 100%;
+    background-color: #f9f9f9;
+    text-align: right;
+  }
+  
+  select#id_living_area {
+    height: auto;
+    padding-left: 30px;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 16px 12px;
+  }
+  
+  .card {
+    border-radius: 10px;
+  }
+  
+  .input-group-text {
+    border-left: none;
+    border-right: 1px solid #ced4da;
+  }
+  
+  #id_living_area, #id_address {
+    border-right: none;
+    border-left: 1px solid #ced4da;
+  }
+  
+  #id_living_area:focus, #id_address:focus {
+    box-shadow: none;
+    border-color: #80bdff;
+  }
+  
+  /* Flip chevron icon */
+  .flip-horizontal {
+    transform: scaleX(-1);
+  }
+</style>
+{% endblock %}

@@ -1,0 +1,604 @@
+{% extends 'student/base.html' %}
+
+{% block content %}
+{% load static %}
+{% load fee_filters %}
+<link rel="stylesheet" href="{% static '/css/base.css' %}">
+
+{% if error %}
+<div class="alert alert-danger text-center" role="alert">
+    {{ error }}
+</div>
+{% endif %}
+{% if msg %}
+<div class="alert alert-info text-center" role="alert">
+    {{ msg }}
+</div>
+{% endif %}
+
+{% if not nile_transfers %}
+{% if user.school in ".بنات.,بنين,بنات" %}
+{% if user.grade in "اولى حضانة,ثانية حضانة,الاول الابتدائى,الثانى الابتدائى,الثالث الابتدائى,الرابع الابتدائى" %}
+<form class="btn mt-1 mb-1" action="{% url 'nile-application' %}" method="GET">
+    <button type="submit" class="btn btn-block btn-primary mt-1 cib" name="button">التحاق بشهادة النيل</button>
+</form>
+{% endif %}
+{% endif %}
+{% endif %}
+
+<div class="ml-4 mt-2">
+    <h6>Student code : {{ user.code }}</h6>
+</div>
+
+<div class="container-fluid text-right mt-1">
+    <div class="row">
+        <div class="col-md-7"></div>
+        <div class="col-md-5">
+            <div class="card text-right border-black" style="background-color: transparent;">
+                <h6 class="card-header">{{ user.username }}</h6>
+                <div class="card-footer">
+                    {{ user.get_grade_display }} - {{ user.school }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 ml-auto text-right">
+            <div id="card-434025">
+                <div class="card" style="background-color: transparent;">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <form action="{% url 'addfees' %}" method="GET" class="mb-0">
+                            <button type="submit" class="btn btn-light cib btn-sm px-2 py-1 rounded-pill shadow-sm w-10" name="button">
+                                <i class="fa fa-credit-card mr-2"></i> تسجيل إيصالات البنك
+                            </button>
+                        </form>
+                        <a class="card-link collapsed" data-toggle="collapse" data-parent="#card-434025" href="#card-element-708669">
+                            تعليمات سداد المصروفات
+                        </a>
+                    </div>
+                    <div id="card-element-708669" class="collapse">
+                        <div class="card-body">
+                            {% if school == 'Alfarouk' %}
+                            <img src="{% static 'images/Alfarouk_fees.jpg'%}" class="img-fluid" alt="">
+                            {% else %}
+                            <img src="{% static 'images/fee.jpg'%}" class="img-fluid" alt="">
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-2">
+        <div class="col-md-6"></div>
+        {% if user.message %}
+        <div class="col-md-6">
+            <div class="alert alert-dismissable alert-primary">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <h6></h6>{{ user.message|safe }}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="row mt-0">
+        <div class="col-md-6"></div>
+        {% if oldSign == 0 %}
+        <div class="col-md-6"></div>
+        {% elif oldSign < 0 %}
+        <div class="col-md-6">
+            <div class="alert alert-dismissable alert-danger mt-3">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <h6>برجاء السداد الفوري لمديونية العام السابق للتتمكن من دفع مصروفات العام الحالي وحجز الكتب الدراسية</h6>
+            </div>
+        </div>
+
+        <div class="container py-1">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="card shadow-lg rounded-lg overflow-hidden" style="background-color: transparent;">
+                        <div class="card-header bg-gradient-primary text-center py-3">
+                            <h5 class="mb-0">
+                                <span class="badge badge-outlined rounded-pill fs-4 py-1 px-4 text-dark mr-5 mt-1" style="border: 2px solid #ffffff; font-size: 1.0rem;">
+                                    {{ OldVale }}
+                                </span> مديونية العام السابق
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th>الحالة</th>
+                                            <th>العام الدراسي</th>
+                                            <th>المبلغ</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <form action="{% url 'pay_online' %}" method="POST">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="value" value="{{ OldVale }}">
+                                                    <input type="hidden" name="kind" value="Study Fees">
+                                                    <input type="hidden" name="year" value="{{ last_year }}">
+                                                    <button type="submit" class="btn btn-danger btn-sm px-2 py-1 rounded-pill shadow-sm w-100" name="button">
+                                                        <i class="fa fa-credit-card mr-3"></i> ادفع {{ OldVale }}
+                                                    </button>
+                                                </form>
+                                            </td>
+                                            <td>{{ last_year }}</td>
+                                            <td>{{ OldVale }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% elif oldSign > 0 %}
+        <div class="col-md-6">
+            <div class="alert alert-dismissable alert-info">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <h6>لديك رصيد من العام الدراسي السابق</h6> 
+                <strong>بقيمة {{ OldVale }} جنيهاً </strong>
+            </div>
+        </div>
+        <br>
+        {% endif %}
+    </div>
+
+    <div class="container py-0">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="card shadow-lg rounded-lg overflow-hidden" style="background-color: transparent;">
+                    <div class="card-header bg-gradient-primary p-0">
+                        <ul class="nav nav-tabs justify-content-end" id="myTab" role="tablist">
+                            
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="tour-tab" data-bs-toggle="tab" data-bs-target="#tour" type="button" role="tab" aria-controls="tour" aria-selected="false">
+                                    <i class="fa fa-money-bill-wave me-2"></i> أخرى
+                                </button>
+                            </li>
+                            
+                            
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="books-tab" data-bs-toggle="tab" data-bs-target="#books" type="button" role="tab" aria-controls="books" aria-selected="false">
+                                    <i class="fa fa-book me-2"></i> كتب
+                                </button>
+                            </li>
+                            
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="car-tab" data-bs-toggle="tab" data-bs-target="#car" type="button" role="tab" aria-controls="car" aria-selected="false">
+                                    <i class="fa fa-bus me-2"></i> سيارة
+                                </button>
+                            </li>
+                            
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="fees-tab" data-bs-toggle="tab" data-bs-target="#fees" type="button" role="tab" aria-controls="fees" aria-selected="true">
+                                    <i class="fa fa-graduation-cap me-2"></i> دراسية
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="card-body">
+                        <div class="tab-content" id="myTabContent">
+                            <!-- Study Fees Tab -->
+                            <div class="tab-pane fade show active" id="fees" role="tabpanel" aria-labelledby="fees-tab">
+                                <div class="position-absolute top-0 start-0 p-0">
+                                    <span class="badge badge-outlined rounded-pill fs-4 py-1 px-4 text-dark ml-1 mt-1" style="border: 2px solid #ffffff; font-size: 1.0rem;">
+                                        {{ study_total_payments }}
+                                    </span>
+                                </div>
+                                <div class="card-header bg-gradient-primary text-right py-1 px-0">
+                                    <h5 class="mb-0">المصروفات الدراسية</h5>
+                                </div>
+                                <div class="card-body px-0">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-hover">
+                                            <thead class="thead-light">
+                                                <tr>
+                                                    <th>الحالة</th>
+                                                    <th>إدفع قبل</th>
+                                                    <th>قسط</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for payment in study_payment_data %}
+                                                <tr style="height: 20px;">
+                                                    <td>
+                                                        {% if payment.status == 'Complete' %}
+                                                        <span class="badge bg-success d-inline-block text-center py-1 px-2 rounded-pill shadow-sm text-white" style="width:90px; font-size: 0.875rem;">تم الدفع</span>
+                                                        {% else %}
+                                                        <form action="{% url 'pay_online' %}" method="POST">
+                                                            {% csrf_token %}
+                                                            <input type="hidden" name="value" value="{{ payment.remaining }}">
+                                                            <input type="hidden" name="kind" value="Study Fees">
+                                                            <input type="hidden" name="year" value="{{ next_year }}">
+                                                            <button type="submit" class="btn btn-danger btn-sm px-2 py-0 rounded-pill shadow-sm" style="width:120px;">
+                                                                <i class="fa fa-credit-card mr-1"></i> ادفع {{ payment.remaining }}
+                                                            </button>
+                                                        </form>
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>{{ payment.date|date:"M d" }}</td>
+                                                    <td>
+                                                        <span class="border border-secondary text-secondary rounded-circle p-1 d-inline-flex justify-content-center align-items-center" style="width: 20px; height: 20px;">
+                                                            <i class="fa-solid fa-{{ payment.number }}"></i>
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>{{ study_total_paid }}</th>
+                                                    <th>مسدد</th>
+                                                </tr>
+                                                {% if student_discount > 0 %}
+                                                <tr>
+                                                    <th></th>
+                                                    <th>{{ student_discount }}</th>
+                                                    <th>خصم</th>
+                                                </tr>
+                                                {% endif %}
+                                                <tr>
+                                                    <th>
+                                                        {% if study_total_due > 0 %}
+                                                        <form action="{% url 'pay_online' %}" method="POST">
+                                                            {% csrf_token %}
+                                                            <input type="hidden" name="value" value="{{ study_total_due }}">
+                                                            <input type="hidden" name="kind" value="Study Fees">
+                                                            <input type="hidden" name="year" value="{{ next_year }}">
+                                                            <button type="submit" class="btn btn-danger btn-sm px-2 py-1 rounded-pill shadow-sm w-100">
+                                                                <i class="fa fa-credit-card mr-3"></i> ادفع {{ study_total_due }}
+                                                            </button>
+                                                        </form>
+                                                        {% endif %}
+                                                    </th>
+                                                    <th>{{ study_total_due }}</th>
+                                                    <th>بـاقـي</th>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Car Tab -->
+                            <div class="tab-pane fade" id="car" role="tabpanel" aria-labelledby="car-tab">
+                                {% if bus %}
+                                <div class="position-absolute top-0 start-0 p-0">
+                                    <span class="badge badge-outlined rounded-pill fs-4 py-1 px-4 text-dark ml-1 mt-1" style="border: 2px solid #ffffff; font-size: 1.0rem;">
+                                        {{ bus_total_payments }}
+                                    </span>
+                                </div>
+                                <div class="card-header bg-gradient-primary text-right py-1 px-0">
+                                    <h5 class="mb-0">اشتراك السيارة</h5>
+                                </div>
+                                <div class="card-body px-0">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-hover">
+                                            <thead class="thead-light">
+                                                <tr>
+                                                    <th>الحالة</th>
+                                                    <th>إدفع قبل</th>
+                                                    <th>قسط</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for payment in bus_payment_data %}
+                                                <tr>
+                                                    <td>
+                                                        {% if payment.status == 'Complete' %}
+                                                        <span class="badge bg-success d-inline-block text-center py-1 px-2 rounded-pill shadow-sm text-white" style="width:90px; font-size: 0.875rem;">تم الدفع</span>
+                                                        {% else %}
+                                                        <form action="{% url 'pay_online' %}" method="POST">
+                                                            {% csrf_token %}
+                                                            <input type="hidden" name="value" value="{{ payment.remaining }}">
+                                                            <input type="hidden" name="kind" value="Bus Fees">
+                                                            <input type="hidden" name="year" value="{{ next_year }}">
+                                                            <button type="submit" class="btn btn-danger btn-sm px-2 py-0 rounded-pill shadow-sm" style="width:120px;">
+                                                                <i class="fa fa-credit-card mr-1"></i> ادفع {{ payment.remaining }}
+                                                            </button>
+                                                        </form>
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>{{ payment.date|date:"M d" }}</td>
+                                                    <td>
+                                                        <span class="border border-secondary text-secondary rounded-circle p-1 d-inline-flex justify-content-center align-items-center" style="width: 20px; height: 20px;">
+                                                            <i class="fa-solid fa-{{ payment.number }}"></i>
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>{{ bus_total_paid }}</th>
+                                                    <th>مسدد</th>
+                                                </tr>
+                                                {% if student_bus_discount > 0 %}
+                                                <tr>
+                                                    <th></th>
+                                                    <th>{{ student_bus_discount }}</th>
+                                                    <th>خصم</th>
+                                                </tr>
+                                                {% endif %}
+                                                <tr>
+                                                    <th>
+                                                        {% if bus_total_due > 0 %}
+                                                        <form action="{% url 'pay_online' %}" method="POST">
+                                                            {% csrf_token %}
+                                                            <input type="hidden" name="value" value="{{ bus_total_due }}">
+                                                            <input type="hidden" name="kind" value="Bus Fees">
+                                                            <input type="hidden" name="year" value="{{ next_year }}">
+                                                            <button type="submit" class="btn btn-danger btn-sm px-2 py-1 rounded-pill shadow-sm w-100">
+                                                                <i class="fa fa-credit-card mr-3"></i> ادفع {{ bus_total_due }}
+                                                            </button>
+                                                        </form>
+                                                        {% endif %}
+                                                    </th>
+                                                    <th>{{ bus_total_due }}</th>
+                                                    <th>بـاقـي</th>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                                {% else %}
+                                {% if school == 'Alfarouk' %}
+                                <div class="alert alert-danger text-center mt-0" role="alert">
+                                    يرجي التواصل مع المدرسة للاشتراك 
+                                </div>
+                                {% else %}
+                                <form action="{% url 'agreement' %}" method="GET">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger btn-sm px-2 py-1 rounded-pill shadow-sm" style="width:200px;">
+                                        <i class="fa fa-credit-card mr-1"></i> الاشتراك في السيارة
+                                    </button>
+                                </form>
+                                {% endif %}
+                                {% endif %}
+                            </div>
+
+                            <!-- Books Tab -->
+                            <div class="tab-pane fade" id="books" role="tabpanel" aria-labelledby="books-tab">
+                                <div class="card-body px-0">
+                                    {% if books %}
+                                        {% if book_types %}
+                                            {% if school == 'Alfarouk' %}
+                                            <div class="alert alert-danger text-center mt-0" role="alert">
+                                                يرجى العلم انه لن يتم الاستلام الا بعد سداد قيمة كتب الوزارة و كامل قيمة ما تم حجزه من الكتب
+                                            </div>
+                                            <div class="alert alert-info text-center mt-0" role="alert">
+                                                عند شراء الكتب كاملة فلا تحتاج لشراء كتب الوزارة مرة اخرى
+                                            </div>
+                                            {% else %}
+                                            <div class="alert alert-danger text-center mt-0" role="alert">
+                                                يرجى العلم انه لن يتم استلام الكتب الا بعد سداد كامل قيمة القسط الاول
+                                            </div>
+                                            {% endif %}
+
+                                            {% for book_type in book_types %}
+                                            <div class="mb-4">
+                                                <div class="position-absolute top-0 start-0 p-0">
+                                                    <span class="badge badge-outlined rounded-pill fs-4 py-1 px-4 text-info ml-1 mt-1" style="border: 2px solid #ffffff; font-size: 1.0rem;">
+                                                        {{ book_type.total_payments }}
+                                                    </span>
+                                                </div>
+                                                <div class="card-header bg-gradient-primary text-right text-dark py-2 px-0">
+                                                    <h6 class="mb-0">{{ book_type.name }}</h6>
+                                                </div>
+                                                <div class="table-responsive mt-2">
+                                                    <table class="table table-striped table-hover">
+                                                        <thead class="thead-light">
+                                                            <tr>
+                                                                <th>الحالة</th>
+                                                                <th>قيمة</th>
+                                                                <th>قسط</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {% for payment in book_type.payment_data %}
+                                                            <tr>
+                                                                <td>
+                                                                    {% if payment.status == 'Complete' %}
+                                                                        <span class="badge bg-success d-inline-block text-center py-1 px-2 rounded-pill shadow-sm text-white" style="width:90px; font-size: 0.875rem;">تم الدفع</span>
+                                                                    {% else %}
+                                                                        <form action="{% url 'pay_online' %}" method="POST">
+                                                                            {% csrf_token %}
+                                                                            <input type="hidden" name="value" value="{{ payment.remaining }}">
+                                                                            <input type="hidden" name="kind" value="{{ book_type.key }}">
+                                                                            <input type="hidden" name="year" value="{{ next_year }}">
+                                                                            <button type="submit" class="btn btn-danger btn-sm px-2 py-0 rounded-pill shadow-sm" style="width:120px;">
+                                                                                <i class="fa fa-credit-card mr-1"></i> ادفع {{ payment.remaining }}
+                                                                            </button>
+                                                                        </form>
+                                                                    {% endif %}
+                                                                </td>
+                                                                <td>{{ payment.amount }}</td>
+                                                                <td>
+                                                                    <span class="border border-secondary text-secondary rounded-circle p-1 d-inline-flex justify-content-center align-items-center" style="width: 20px; height: 20px;">
+                                                                        <i class="fa-solid fa-{{ payment.number }}"></i>
+                                                                    </span>
+                                                                </td>
+                                                            </tr>
+                                                            {% endfor %}
+                                                        </tbody>
+                                                        <tfoot>
+                                                            <tr>
+                                                                <th>
+                                                                    {% if book_type.total_due > 0 %}
+                                                                    <form action="{% url 'pay_online' %}" method="POST">
+                                                                        {% csrf_token %}
+                                                                        <input type="hidden" name="value" value="{{ book_type.total_due }}">
+                                                                        <input type="hidden" name="kind" value="{{ book_type.key }}">
+                                                                        <input type="hidden" name="year" value="{{ next_year }}">
+                                                                        <button type="submit" class="btn btn-danger btn-sm px-2 py-1 rounded-pill shadow-sm w-100">
+                                                                            <i class="fa fa-credit-card mr-3"></i> ادفع الكل {{ book_type.total_due }}
+                                                                        </button>
+                                                                    </form>
+                                                                    {% else %}
+                                                                    <span class="badge bg-success d-inline-block text-center py-1 px-2 rounded-pill shadow-sm text-white" style="width:90px; font-size: 0.875rem;">تم الدفع</span>
+                                                                    {% endif %}
+                                                                </th>
+                                                                <th>{{ book_type.total_paid }}</th>
+                                                                <th>مسدد</th>
+                                                            </tr>
+                                                        </tfoot>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            {% endfor %}
+                                        {% else %}
+                                        <div class="alert alert-info text-center mt-3">
+                                            لا توجد كتب مدرجة للدفع حالياً
+                                        </div>
+                                        {% endif %}
+                                    {% else %}
+                                    <div class="alert alert-danger text-center mt-3">
+                                        يجب سداد جميع الاقساط المستحقه اولًا
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <!-- Tour Tab - Conditionally Included -->
+                            {% comment %} {% if tour %} {% endcomment %}
+                            <div class="tab-pane fade" id="tour" role="tabpanel" aria-labelledby="tour-tab">
+
+
+
+                            {% comment %} <div class="card-header bg-gradient-primary text-right py-1 px-0">
+                                <h5 class="mb-0">
+                                    الرسوم الأخرى
+                                </h5>
+                            </div> {% endcomment %}
+                                
+                                <div class="card-body px-0">
+                                    <!-- Tours Fees Section (only show if student.pay_tours is True) -->
+                                    {% if student_pay_tours and tours_fees_data %}
+                                        <div class="mb-4">
+                                            <h6 class="text-right mb-3">الانشطة و الرحلات</h6>
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-hover">
+                                                    <thead class="thead-light">
+                                                        <tr>
+                                                            <th>القيمة</th>
+                                                            <th>البيان</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% for fee in tours_fees_data %}
+                                                        <tr>
+                                                            <td>
+                                                                {% if fee.is_paid %}
+                                                                    <span class="badge bg-success d-inline-block text-center py-2 px-2 rounded-pill shadow-sm text-white" style="width:120px; font-size: 0.875rem;">تم الدفع</span>
+                                                                {% else %}
+                                                                    <form action="{% url 'pay_online' %}" method="POST">
+                                                                        {% csrf_token %}
+                                                                        <input type="hidden" name="value" value="{{ fee.value }}">
+                                                                        <input type="hidden" name="kind" value="{{ fee.kind }}">
+                                                                        <input type="hidden" name="year" value="{{ next_year }}">
+                                                                        <input type="hidden" name="reference" value="{{ fee.reference }}">
+                                                                        <button type="submit" class="btn btn-danger btn-sm px-2 py-1 rounded-pill shadow-sm" style="width:120px;">
+                                                                            <i class="fa fa-credit-card mr-1"></i> ادفع {{ fee.value }}
+                                                                        </button>
+                                                                    </form>
+                                                                {% endif %}
+                                                            </td>
+                                                            <td>{{ fee.name }}</td>
+                                                        </tr>
+                                                        {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                    
+                                    <!-- Other Fees Section (always show if available) -->
+                                    {% if other_fees_data %}
+                                        <div class="mb-4">
+                                            <h6 class="text-right mb-3">مصروفات أخرى</h6>
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-hover">
+                                                    <thead class="thead-light">
+                                                        <tr>
+                                                            <th>القيمة</th>
+                                                            <th>البيان</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% for fee in other_fees_data %}
+                                                        <tr>
+                                                            <td>
+                                                                {% if fee.is_paid %}
+                                                                    <span class="badge bg-success d-inline-block text-center py-2 px-2 rounded-pill shadow-sm text-white" style="width:120px; font-size: 0.875rem;">تم الدفع</span>
+                                                                {% else %}
+                                                                    <form action="{% url 'pay_online' %}" method="POST">
+                                                                        {% csrf_token %}
+                                                                        <input type="hidden" name="value" value="{{ fee.value }}">
+                                                                        <input type="hidden" name="kind" value="{{ fee.kind }}">
+                                                                        <input type="hidden" name="year" value="{{ next_year }}">
+                                                                        <input type="hidden" name="reference" value="{{ fee.reference }}">
+                                                                        <button type="submit" class="btn btn-danger btn-sm px-2 py-1 rounded-pill shadow-sm" style="width:120px;">
+                                                                            <i class="fa fa-credit-card mr-1"></i> ادفع {{ fee.value }}
+                                                                        </button>
+                                                                    </form>
+                                                                {% endif %}
+                                                            </td>
+                                                            <td>{{ fee.name }}</td>
+                                                        </tr>
+                                                        {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                    
+                                    <!-- No Fees Message -->
+                                    {% if not other_fees_data and not tours_fees_data %}
+                                        <div class="alert alert-info text-center mt-3">
+                                            لا توجد رسوم أخرى للدفع حالياً
+                                        </div>
+                                    {% elif not other_fees_data and tours_fees_data and not student_pay_tours %}
+                                        <div class="alert alert-info text-center mt-3">
+                                            لا توجد رسوم أخرى للدفع حالياً
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% comment %} {% endif %} {% endcomment %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Ensure the DOM is fully loaded before initializing tabs
+    document.addEventListener('DOMContentLoaded', function() {
+        var triggerTabList = [].slice.call(document.querySelectorAll('#myTab button'))
+        triggerTabList.forEach(function (triggerEl) {
+            var tabTrigger = new bootstrap.Tab(triggerEl)
+            triggerEl.addEventListener('click', function (event) {
+                event.preventDefault()
+                tabTrigger.show()
+            })
+        })
+    });
+</script>
+
+{% endblock %}

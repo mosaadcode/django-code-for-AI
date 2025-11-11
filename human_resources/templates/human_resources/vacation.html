@@ -1,0 +1,223 @@
+{% extends base_template %}
+
+{% block content %}
+    <!-- Add comments here to explain the purpose of this block -->
+    {% if error %}
+    <div class="alert alert-danger text-center" role="alert">
+        {{ error }}
+    </div>
+    {% endif %}
+    {% if msg %}
+    <div class="alert alert-info text-center" role="alert">
+        {{ msg }}
+    </div>
+    {% endif %}
+
+    <div class="container-fluid text-right">
+        <div class="row">
+            <div class="col-md-8">
+            </div>
+            <div class="col-md-4 mb-3 text-right">
+              {% if not OpenVacation %}
+              <div id="card-434020">
+                  <div class="card border-0 mt-2 mb-3" style="background-color: transparent;">
+                      <div class="card-header text-center">
+                          <a class="card-link collapsed" data-toggle="collapse" data-parent="#card-434020" href="#card-element-708660">
+                              <i class="fa fa-edit" aria-hidden="true"></i>طلب إجازة
+                          </a>
+                      </div>
+                      <div id="card-element-708660" class="collapse">
+                          <div class="card-body">
+                              <!-- Add a separate CSS class for styling -->
+                              <form method="POST" id="form102" class="custom-form" enctype="multipart/form-data">
+                                  {% csrf_token %}
+                                  <!-- Use a CSS class for styling form elements -->
+                                  <div class="form-row">
+                                      <div class="col-6">
+                                          {% comment %} <label for="reason" class="form-text float-right"> :إرفق صورة</label>
+                                          {{ form.photo }} {% endcomment %}
+                                          {% comment %} <input type="text" name="reason" class="form-control" placeholder="سبب الاجازة"> {% endcomment %}
+                                      </div>
+                                      <div class="col-6">
+                                          <label for="type" class="form-text float-right"> :نوع الإجازة</label>
+                                          <select type="text" required="" name="type" id="type102" class="form-control text-right">
+                                              <!-- <option value=""></option> -->
+                                              {% if is_absent %}
+                                              <option value="إذن غياب" selected="">إذن غياب</option>
+                                              {% endif %}
+                                              {% if is_vacation_s %}
+                                              <option value="مرضي">مرضي</option>
+                                              {% endif %}
+                                              {% if is_vacation %}
+                                              <option value="من الرصيد">من الرصيد</option>
+                                              {% endif %}
+                                          </select>
+                                      </div>
+                                  </div>
+      
+                                  <div class="form-row">
+                                      <div class="col-6">
+                                          <label for="end_time" class="form-text float-right">:إلى يوم</label>
+                                      </div>
+                                      <div class="col-6">
+                                          <label for="start_time" class="form-text float-right">:من يوم</label>
+                                      </div>
+                                  </div>
+                                  <div class="form-row">
+                                      <div class="col-6">
+                                          {{ form.date_to }}
+                                      </div>
+                                      <div class="col-6">
+                                          {{ form.date_from }}
+                                      </div>
+                                  </div>
+      
+                                  <div class="form-row mt-3">
+                                      <div class="col-5">
+                                          <input type="submit" value="طلب إجازة" class="btn btn-secondary btn-block cib">
+                                      </div>
+                                      <div class="col-7">
+                                          <input type="hidden" name="unused_perms" value="{{ unused_perms }}">
+                                      </div>
+                                  </div>
+                              </form>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              {% endif %}
+                {% if settings.is_vacation %}
+                    {% include 'human_resources/progress_bar.html' with label="رصيد سنوي" unused_value=unused_vacations used_value=used_vacations total_value=total_vacations used_Ratio=used_vacations_percentage unused_Ratio=unused_vacations_percentage %}
+                {% endif %}
+                {% if settings.is_vacation_s %}
+                    {% include 'human_resources/progress_bar.html' with label="رصيد مرضي" unused_value=unused_vacations_s used_value=used_vacations_s total_value=total_vacations_s used_Ratio=used_vacations_s_percentage unused_Ratio=unused_vacations_s_percentage %}
+                {% endif %}
+                {% if settings.is_absent %}
+                    {% include 'human_resources/progress_bar.html' with label="إذن غياب" unused_value=unused_absents used_value=used_absents total_value=total_absents used_Ratio=used_absents_percentage unused_Ratio=unused_absents_percentage %}
+                {% endif %}
+
+            </div>
+        </div>
+
+        <h6 class="text-right mt-3" style="font-size: 13px; margin-top: 5px; color: rgb(85, 82, 78);">  اجازات الشهر الجاري من {{ month_start|date:'d-m'}} إلى {{ month_end|date:'d-m'}}</h6>
+        <div class="row mt-1">
+            <div class="col-md-5">
+            </div>
+            <div class="col-md-7 ml-auto text-center">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col"><i class="fa fa-edit" aria-hidden="true"></th>
+                            <th scope="col"><i class="fa fa-check" aria-hidden="true"></th>
+                            <th scope="col"><i class="fa fa-check" aria-hidden="true"></th>
+                            <th scope="col">إلى</th>
+                            <th scope="col">من</th>
+                            <th scope="col">اجازة</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for vacation in vacations %}
+                        <tr>
+                            <td>
+                                {% if not vacation.ok2 %}
+                                    <form method="POST" action="{% url 'delete_vacation' vacation.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger">إلغاء</button>
+                                    </form>
+                                {% endif %}
+                            </td>
+                            <td class="align-middle">
+                                {% if vacation.ok2 == True %}
+                                <i class="fa fa-check-circle" aria-hidden="true" style="color:green"></i>
+                                {% else %}
+                                <i class="fa fa-minus-circle" aria-hidden="true" style="color:red"></i>
+                                {% endif %}
+                            </td>
+                            <td class="align-middle">
+                                {% if vacation.ok1 == True %}
+                                <i class="fa fa-check-circle" aria-hidden="true" style="color:green"></i>
+                                {% else %}
+                                <i class="fa fa-minus-circle" aria-hidden="true" style="color:red"></i>
+                                {% endif %}
+                            </td>
+                            <td>{{ vacation.date_to|date:'d M' }}</td>
+                            <td>{{ vacation.date_from|date:'d M' }}</td>
+                            <td>{{ vacation.type }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+      <script>
+        // Get the date_from and date_to input elements
+        const dateFromInput = document.getElementById('date_from');
+        const dateToInput = document.getElementById('date_to');
+        
+        // Get the type input element
+        const typeInput = document.getElementById('type102');
+        
+        // Get the x and y variables from the template
+        const x = {{ max_vacation_s }}; // Replace {{ x }} with the actual value from your template
+        const y = {{ max_vacation }}; // Replace {{ y }} with the actual value from your template
+    
+        // Add an event listener to the date_from input
+        dateFromInput.addEventListener('input', function () {
+            dateToInput.value = dateFromInput.value;
+            dateToInput.min = dateFromInput.value; // Set the min attribute
+            typeInput.disabled = true;
+            
+            // Check the value of typeInput and set dateToInput.max accordingly
+            if (typeInput.value === 'مرضي') {
+                const calculatedMaxDate = calculateMaxDate(x);
+                if (calculatedMaxDate <= "{{ month_end|date:'Y-m-d' }}") {
+                    dateToInput.max = calculatedMaxDate;
+                }
+            } else if (typeInput.value === 'من الرصيد') {
+                const calculatedMaxDate = calculateMaxDate(y);
+                if (calculatedMaxDate <= "{{ month_end|date:'Y-m-d' }}") {
+                    dateToInput.max = calculatedMaxDate;
+                }
+            }
+            
+        //    if (typeInput.value !== 'إذن غياب') {
+           //     dateToInput.removeAttribute('readonly');
+          //  } else {
+         //       dateToInput.setAttribute('readonly', 'true');
+        //    }
+        });
+        
+        const form = document.getElementById('form102');
+    
+        form.addEventListener('submit', function (event) {
+          // Enable the typeInput just before submitting the form
+          typeInput.disabled = false;
+        });
+    
+        // Function to calculate the max date based on x or y
+        function calculateMaxDate(value) {
+            const currentDate = new Date(dateFromInput.value);
+            currentDate.setDate(currentDate.getDate() + value);
+            const maxDate = currentDate.toISOString().split('T')[0];
+            return maxDate;
+        }
+
+        // Client-Side Validation for uploaded Photo
+        {% comment %} document.getElementById('form102').addEventListener('submit', function (event) {
+            var fileInput = document.getElementById('id_photo');
+            var fileName = fileInput.value;
+            var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+    
+            if (fileName && !allowedExtensions.exec(fileName)) {
+                alert('(jpg, jpeg, png, gif)يرجى التحقق من الصورة. يجب ان تكون احد الامتدادات التالية');
+                event.preventDefault(); // Prevent form submission
+            }
+        });  {% endcomment %}
+
+    </script>
+    
+      
+      
+{% endblock %}

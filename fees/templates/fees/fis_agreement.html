@@ -1,0 +1,127 @@
+{% extends 'fis/base2.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5" dir="ltr">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <!-- Agreement Collapse -->
+
+    <div class="row">
+        <div class="col-md-12 ml-auto text-left">
+            <div id="card-434025">
+                <div class="card" style="background-color: transparent;">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                            <a class="card-link collapsed" data-toggle="collapse" data-parent="#card-434025" href="#card-element-708669">
+                                School Bus subscription instructions
+                            </a>
+                    </div>
+                    <div id="card-element-708669" class="collapse">
+                        <div class="card-body">
+                                {% comment %} <img src="{% static 'images/FisPayment.jpg'%}" class="img-fluid" alt=""> {% endcomment %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>  
+    <br>
+      <!-- Form Card -->
+      <div class="card shadow-sm border-0 text-left" style="background-color: transparent;">
+        <div class="card-body p-4">
+          {% if error %}
+          <div class="alert alert-danger alert-dismissible fade show text-right" role="alert">
+            {{ error }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          {% endif %}
+
+          <form method="POST" class="needs-validation" novalidate>
+            {% csrf_token %}
+            
+            <!-- Address Field -->
+            <div class="form-group mb-4 text-left">
+              <div class="input-group-append mb-2">
+                <span class="input-group-text bg-light"><i class="fas fa-home"> </i></span>
+              </div>
+              <div class="input-group">
+                {{ form.address }}
+              </div>
+            </div>
+            <!-- Living Area Field -->
+            <div class="form-group mb-4 text-left">
+              <div class="input-group">
+                {{ form.living_area }}
+              </div>
+            </div>
+
+
+            <!-- Submit Button -->
+            <div class="form-group mt-5 text-left">
+              <button type="submit" class="btn btn-primary cib btn-block py-3">
+                <i class="fas fa-check-circle ml-2"></i> Accept the terms and I want to register
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Help Text -->
+      <div class="text-center mt-4 text-muted" dir="ltr">
+        <p class="small">For any inquiries, please contact the School Bus Department at 00000   000000.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* RTL Adjustments */
+  body {
+    text-align: left;
+  }
+  
+  #id_living_area, #id_address {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 100%;
+    background-color: #f9f9f9;
+    text-align: left;
+  }
+  
+  select#id_living_area {
+    height: auto;
+    padding-left: 30px;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 16px 12px;
+  }
+  
+  .card {
+    border-radius: 10px;
+  }
+  
+  .input-group-text {
+    border-left: none;
+    border-right: 1px solid #ced4da;
+  }
+  
+  #id_living_area, #id_address {
+    border-right: none;
+    border-left: 1px solid #ced4da;
+  }
+  
+  #id_living_area:focus, #id_address:focus {
+    box-shadow: none;
+    border-color: #80bdff;
+  }
+  
+  /* Flip chevron icon */
+  .flip-horizontal {
+    transform: scaleX(-1);
+  }
+</style>
+{% endblock %}

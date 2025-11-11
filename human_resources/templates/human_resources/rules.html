@@ -1,0 +1,268 @@
+{% extends base_template %}
+{% load static %}
+{% block content %}
+
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اللائحة الداخلية للمدرسة</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            {% comment %} padding: 20px; {% endcomment %}
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-top: 40px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        .header h1 {
+            color: #2c3e50;
+            font-weight: 700;
+        }
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+        .card-header {
+            background: linear-gradient(to right, #4b6cb7, #182848);
+            color: white;
+            border-radius: 12px 12px 0 0 !important;
+            padding: 10px 15px;
+            font-weight: 400;
+            font-size: 1.2rem;
+        }
+        .card-body {
+            padding: 0;
+        }
+        iframe {
+            border-radius: 0 0 12px 12px;
+        }
+        .btn-primary {
+            background: linear-gradient(to right, #4b6cb7, #182848);
+            border: none;
+            padding: 10px 25px;
+            font-weight: 600;
+            border-radius: 8px;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(to right, #182848, #4b6cb7);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .agreement-status {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: center;
+            font-weight: 600;
+        }
+        .accepted {
+            color: #28a745;
+        }
+        .pending {
+            color: #dc3545;
+        }
+        .modal-content {
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        .modal-header {
+            background: linear-gradient(to right, #4b6cb7, #182848);
+            color: white;
+        }
+        .rules-content {
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            margin: 15px 0;
+            line-height: 1.6;
+        }
+        .rules-content h4 {
+            color: #2c3e50;
+            margin-top: 15px;
+        }
+        .rules-content ul {
+            padding-right: 20px;
+        }
+        .highlight {
+            background-color: #fff9c4;
+            padding: 15px;
+            border-right: 4px solid #ffc107;
+            border-radius: 5px;
+            margin: 15px 0;
+            font-weight: 600;
+        }
+        .employee-info {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .alert {
+            border-radius: 10px;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            .header h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        {% comment %} <div class="header">
+            <p>يجب الموافقة على اللائحة  للمتابعة</p>
+        </div> {% endcomment %}
+
+        <!-- Messages -->
+        {% if msg %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>{{ msg }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+        
+        {% if error %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>{{ error }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+
+        <div class="row">
+            <div class="col-md-12">
+                <div id="card-434025">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <a class="card-link collapsed" data-bs-toggle="collapse" href="#card-element-708669">
+                                اللائحة الداخلية للمدرسة
+                                <i class="fas fa-chevron-down ms-2"></i>
+                            </a>
+                        </div>
+                        <div id="card-element-708669" class="collapse">
+                            <div class="card-body">
+                                {% if emp.rules_agreed %}
+                                    {% if emp.school == 'Alfarouk' %}
+                                    <iframe src="{% static 'images/Alfarouk_rules.pdf' %}" width="100%" height="600px" style="border: none;"></iframe>
+                                    {% else %}
+                                    <iframe src="{% static 'images/mfis_rules.pdf' %}" width="100%" height="600px" style="border: none;"></iframe>
+                                    {% endif %}
+                                {% else %}
+                                <div class="text-center p-4" id="rules-placeholder">
+                                    <i class="fas fa-lock fs-1 mb-3 text-warning"></i>
+                                    <h4>يجب الموافقة على اللائحة  للمتابعة</h4>
+                                    <p>لمشاهدة اللائحة الداخلية للمدرسة، يرجى الضغط على الزر أدناه والموافقة عليها</p>
+                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agreementModal">
+                                         الموافقة و عرض اللائحة
+                                    </button>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="agreement-status {% if emp.rules_agreed %}accepted{% else %}pending{% endif %}" id="agreement-status">
+            <i class="fas {% if emp.rules_agreed %}fa-check-circle{% else %}fa-exclamation-circle{% endif %} me-2"></i>
+            {% if emp.rules_agreed %}
+            لقد وافقت على اللائحة الداخلية في {{ emp.rules_agreed_date|date:"Y/m/d" }}
+            {% else %}
+            لم توافق بعد على اللائحة الداخلية للمدرسة
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Agreement Modal -->
+    <div class="modal fade" id="agreementModal" tabindex="-1" aria-labelledby="agreementModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="agreementModalLabel">الموافقة على اللائحة الداخلية</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="post" action="{% url 'agree_to_rules' %}">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <p>قبل الاطلاع على اللائحة الداخلية للمدرسة، يرجى قراءة الشروط والأحكام أدناه ثم الموافقة عليها:</p>
+                        
+                        <div class="rules-content">
+                            <h4>نظرة عامة</h4>
+                            <p>تهدف اللائحة الداخلية للمدرسة إلى معرفة كل موظف فى المدرسة جميع واجباته التى يجب أن يلتزم بها ويجتهد فى
+                                تطبيق كافة نقاطها ، يلتزم الحزم فى متابعة تلك الأعباء التى لا يعين عليها ولا
+                                يكافىء أجرها إلا الله سبحانه وتعالى ، وأيضاً حقوقه التى يجب أن تكون واضحة تماماً
+                               </p>
+                            
+                            {% comment %} <h4>بنود عامة</h4>
+                            <ul>
+                                <li>الالتزام بمواعيد الحضور والانصراف</li>
+                                <li>الالتزام بالزي المدرسي الموحد</li>
+                                <li>إحضار الكتب والأدوات المدرسية بشكل يومي</li>
+                                <li>الحفاظ على نظافة المدرسة ومرافقها</li>
+                                <li>الالتزام بآداب السلوك والتعامل مع الآخرين</li>
+                            </ul>
+                            
+                            <h4>الالتزامات الأكاديمية</h4>
+                            <ul>
+                                <li>إكمال الواجبات المنزلية في موعدها</li>
+                                <li>الاستعداد للاختبارات والتقييمات</li>
+                                <li>الالتزام بقواعد الغرفة الصفية</li>
+                            </ul> {% endcomment %}
+                            
+                            <div class="highlight">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                بالضغط على "أوافق"، فإنك تقر بأنك قد قرأت وفهمت اللائحة الداخلية للمدرسة وتوافق على الالتزام بجميع بنودها.
+                            </div>
+                        </div>
+                        
+                        <div class="form-check mb-3">
+                            <input class="form-check-input ml-4" type="checkbox" id="agreeCheckbox" name="agree" required>
+                            <label class="form-check-label mr-4" for="agreeCheckbox">
+                                     أوافق على الشروط والأحكام المذكورة أعلاه
+                            </label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                        <button type="submit" class="btn btn-primary">أوافق</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+{% endblock %}

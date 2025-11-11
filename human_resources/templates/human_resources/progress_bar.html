@@ -1,0 +1,23 @@
+<div class="progress-bar-wrapper">
+    <div class="progress-bar-label text-right mt-1 mb-1" style="font-size: 13px; margin-top: 5px; color: rgb(85, 82, 78);">
+        {{label}}
+        <span class="badge badge-info">{{total_value}}</span>
+      </div>
+  
+    <div class="progress mt-0" style="height: 25px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);">
+      <div class="progress-bar bg-info" role="progressbar" style="width: {{ unused_Ratio }}%;" aria-valuenow="{{ unused_value }}" aria-valuemin="0" aria-valuemax="{{ total_value }}">{{ unused_value }}  لديك</div>
+  
+      <div class="progress-bar bg-secondary" role="progressbar" style="width: {{ used_Ratio }}%;" aria-valuenow="{{ used_value }}" aria-valuemin="0" aria-valuemax="{{ total_value }}"></div>
+  
+      <div class="progress-bar-data" style="font-size: 14px; color: white; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"></div>
+    </div>
+  </div> 
+<!-- Example for a styled progress bar -->
+{% comment %} <div class="progress-bar-wrapper">
+    <h6 class="progress-bar-label text-right mt-1" style="font-size: 13px; margin-top: 5px; color: rgb(85, 82, 78);">{{label}} {{total_value}} يوم</h6>
+
+    <div class="progress mt-0" style="height: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);">
+        <div class="progress-bar bg-info" role="progressbar" style="width: {{ unused_Ratio }}%;" aria-valuenow="{{ unused_value }}" aria-valuemin="0" aria-valuemax="{{ total_value }}">{{ unused_value }} باقي
+        </div>
+    </div>
+</div> {% endcomment %}

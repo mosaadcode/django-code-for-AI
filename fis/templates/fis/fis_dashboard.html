@@ -1,0 +1,288 @@
+{% extends 'fis/base2.html' %}
+
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static '/css/base.css' %}">
+
+{% if error %}
+<div class="alert alert-danger text-center" role="alert">
+	{{ error }}
+</div>
+{% endif %}
+{% if msg %}
+<div class="alert alert-info text-center" role="alert">
+	{{ msg }}
+</div>
+{% endif %}
+
+<div class="container-fluid text-left  ">
+	<br>
+		<div class="row">
+			<div class="col-md-7">
+			</div>
+			<div class="col-md-5">
+				<div class="card text-left border-black ">
+					<h6 class="card-header">
+	           Welcome 
+					</h6>
+					<div class="card-body ">
+						<h6 class="card-text">
+							{{ user.username }}
+						</h6>
+					</div>
+					<div class="card-footer ">
+						{{ user.school }} - {{ user.get_grade_display }}
+					</div>
+				</div>
+			</div>
+		</div>
+
+	<br>
+	<div class="row">
+		<div class="col-md-12 ml-auto mt-1 text-left">
+			<div id="card-434025">
+				<div class="card">
+					<div class="card-header">
+						 <a class="card-link collapsed" data-toggle="collapse" data-parent="#card-434025" href="#card-element-708669">Payment Details</a>
+					</div>
+					<div id="card-element-708669" class="collapse">
+						<div class="card-body">
+								<img src="{% static 'images/FisPayment.jpg'%}" class="img-fluid" alt="">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<br>
+	<br>
+		<div class="row">
+			<div class="col-md-6">
+			</div>
+	    {% if user.message == null %}
+	    <div class="col-md-6">
+			</div>
+	    {% else %}
+			<div class="col-md-6">
+				<div class="alert alert-dismissable alert-primary">
+
+					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+						×
+					</button>
+					<h6>
+						<!-- بريد -->
+					</h6>{{ user.message|safe }}
+				</div>
+			</div>
+	    {% endif %}
+		</div>
+	{% comment %} <div class="row">
+		<div class="col-md-6">
+		</div>
+	{% if oldSign == 0 %}
+	<div class="col-md-6">
+		</div>
+		<br>
+	{% elif oldSign < 0 %}
+		<div class="col-md-6">
+			<div class="alert alert-dismissable alert-danger">
+
+				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+					×
+				</button>
+				<h6>
+					برجاء السداد الفوري للمديونية السابقة
+				</h6> <strong>بقيمة {{ OldVale }} جنيهاً </strong>
+			</div>
+		</div>
+		<br>
+		{% elif oldSign > 0 %}
+		<div class="col-md-6">
+			<div class="alert alert-dismissable alert-info">
+
+				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+					×
+				</button>
+				<h6>
+					لديك رصيد من العام الدراسي السابق
+				</h6> <strong>بقيمة {{ OldVale }} جنيهاً </strong>
+			</div>
+		</div>
+		<br>
+	{% endif %}
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="table-responsive">
+				<table class="table table-hover text-center">
+					<thead>
+						<tr>
+							<th scope="col"><i class="fa fa-calendar  mr-2"></i>فترة السداد</th>
+							<th scope="col"><i class="fa fa-graduation-cap mr-2"></i>المصروفات الدراسية</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><button type="button" class="btn btn-deafult text-center mt-2 p-0" style="display:inline-block;width:150px"><h6>قبل اخر يونيو</h6></button></td>
+				    	<th scope="row"><button type="button" class="btn btn-primary cib   p-2" style="display:inline-block; width:170px" >القسط الأول<span class="badge badge-light ml-2"><h6>{{ user.study_payment1 }}</h6></span></button></th>
+						</tr>
+						<tr>
+							<td><button type="button" class="btn btn-deafult text-center mt-2 p-0" style="display:inline-block;width:150px"><h6>خلال سبتمير</h6></button></td>
+				    	<th scope="row"><button type="button" class="btn btn-primary cib   p-2" style="display:inline-block; width:170px" >القسط الثاني<span class="badge badge-light ml-2"><h6>{{ user.study_payment2 }}</h6></span></button></th>
+						</tr>
+						<tr>
+							<td><button type="button" class="btn btn-deafult text-center mt-2 p-0" style="display:inline-block;width:150px"><h6>خلال ديسمبر</h6></button></td>
+				    	<th scope="row"><button type="button" class="btn btn-primary cib   p-2" style="display:inline-block; width:170px" >القسط الثالث<span class="badge badge-light ml-2"><h6>{{ user.study_payment3 }}</h6></span></button></th>
+						</tr>
+						<tr>
+							<td><button type="button" class="btn btn-deafult text-center mt-2 p-0" style="display:inline-block;width:150px"><h6>خلال فبراير</h6></button></td>
+				    	<th scope="row"><button type="button" class="btn btn-primary cib   p-2" style="display:inline-block; width:170px" >القسط الرابع<span class="badge badge-light ml-2"><h6>{{ user.study_payment4 }}</h6></span></button></th>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	{% if user.bus_active == True %}
+	<div class="row">
+	<div class="col-md-12 ">
+		<div class="table-responsive">
+			<table class="table table-hover text-center">
+				<thead>
+					<tr>
+						<th scope="col"></th>
+						<th scope="col "><i class="fa fa-bus mr-2 mt-4"></i>إشتراك السيارة</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td><button type="button" class="btn btn-deafult text-center mt-3 p-0" style="display:inline-block;width:150px"><h6>قبل اخر مايو</h6></button></td>
+						<th scope="row"><button type="button" class="btn btn-primary cib p-2" style="display:inline-block; width:170px" >القسط الأول<span class="badge badge-light ml-2"><h6>{{ user.bus_payment1 }}</h6></span></button></th>
+					</tr>
+					<tr>
+						<td><button type="button" class="btn btn-deafult text-center mt-3 p-0" style="display:inline-block;width:150px"><h6>قبل بداية الدراسة</h6></button></td>
+						<th scope="row"><button type="button" class="btn btn-primary cib p-2" style="display:inline-block; width:170px" >القسط الثاني<span class="badge badge-light ml-2"><h6>{{ user.bus_payment2 }}</h6></span></button></th>
+                   </tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	</div>
+	{% endif %}
+	{% if  user.discount > 0 %}
+	<br>
+	<div class="row">
+	<div class="col-md-12 ">
+		<div class="table-responsive">
+			<table class="table table-hover text-center">
+				<thead>
+					<tr>
+						<th scope="col"></th>
+						<th scope="col "><i class="fa fa-handshake-o mr-2 mt-4"></i>خصومات</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td><button type="button" class="btn btn-deafult text-center mt-3 p-0" style="display:inline-block;width:150px"><h6> </h6></button></td>
+						<th scope="row"><button type="button" class="btn btn-primary cib p-2" style="display:inline-block; width:170px" > مبلغ خصم <span class="badge badge-light ml-2"><h6>{{ user.discount }}</h6></span></button></th>
+					</tr>
+					<!-- <tr>
+						<td><button type="button" class="btn btn-deafult text-center mt-3 p-0" style="display:inline-block;width:150px"><h6>مـن 10/01 الى 10/30</h6></button></td>
+						<th scope="row"><button type="button" class="btn btn-primary cib p-2" style="display:inline-block; width:170px" >القسط الثاني<span class="badge badge-light ml-2"><h6>{{ user.bus_payment2 }}</h6></span></button></th>
+		</tr> -->
+				</tbody>
+			</table>
+		</div>
+	</div>
+	</div>
+	{% endif %} {% endcomment %}
+	
+	<div class="row">
+	<div class="col-md-12 ">
+		<div class="table-responsive">
+			<table class="table table-hover text-center">
+				<thead>
+					<tr>
+						<th scope="col "><i class="fa fa-credit-card mr-4 mr-2"></i>Payment Status</th>
+						<th scope="col">
+								{% comment %} <form class="btn mt-5"  action="{% url 'addfees' %}" method="GET">
+									<button type="submit" name="button" >تسجيل إيصالات البنك</button>
+								</form> {% endcomment %}
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						{% if user.payment_status < 0 %}
+						<th scope="row"><button type="button" class="btn btn-danger m-0 pr-1 pl-1" style="display:inline-block; width:175px" >مستحق السداد<span class="badge badge-light ml-2"><h6>0</h6></span></button></th>
+						{% else %}
+						<th scope="row"><button type="button" class="btn btn-info m-0 pr-1 pl-1" style="display:inline-block; width:140px" >Paid <span class="badge badge-light ml-2"><h6>{{ user.total_paid }}</h6></span></button></th>
+						<th scope="row"><button type="button" class="btn btn-danger m-0 pr-1 pl-1" style="display:inline-block; width:175px" >To pay<span class="badge badge-light ml-2"><h6>{{ user.payment_status }}</h6></span></button></th>
+						{% endif %}
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	</div>
+
+    <div id="card-434020">  
+        <div class="card border-0 mt-2 mb-3" style="background-color: transparent; ">
+            <div class="card-header text-center">
+                <a class="card-link collapsed" data-toggle="collapse" data-parent="#card-434020" href="#card-element-708660"> <i class="fa fa-edit" aria-hidden="true" ></i>Add Payment</a>
+            </div>
+            <div id="card-element-708660" class="collapse">
+                <div class="card-body" style="background-color: rgba(122, 120, 120, 0.068); border-radius: 15px;">
+                  <form method="POST">
+                    {% csrf_token %}
+                    <div class="row">
+                      <div class="col-6">
+                        <small for="type" class="form-text float-left"> Payment:</small>
+                      </div>
+                      <div class="col-6">
+                        <small for="date" class="form-text float-left">Value:</small>
+                      </div>
+                    </div>
+            
+                    <div class="row">
+                      <div class="col-6">
+                        <select  required="" name="kind" id="id_kind" class="form-control text-left">
+                            <option value="دراسية" selected="">Study Payment</option>
+                            <option value="سيارة" >Bus Payment</option>
+                        </select>
+                      </div>
+                      <div class="col-6">
+                        <input type="number" name="value" min="0" class="form-control" equired="" id="id_value">
+                      </div>
+                    </div>
+                  
+                    <div class="row">
+                      <div class="col-6">
+                        <small for="end_time" class="form-text float-left">Date:</small>
+                      </div>
+                      <div class="col-6">
+                        <small for="start_time" class="form-text float-left">Bank Account</small>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-6">
+                        <input type="date"  name="payment_date" required="" class="form-control" id="id_payment_date">
+                      </div>
+                      <div class="col-6">
+						<select dir="rtl" name="bank_account" required=""  class="form-control" id="id_bank_account">
+							<option value="1903530635939300017">1903530635939300017</option>
+						  </select>
+                      </div>
+                    </div>
+            
+                    <div class="row mt-3">
+                      <div class="col-5">
+                        <input type="submit" value="Add Payment" class="btn btn-secondary btn-block fis">
+                      </div>
+                    
+	<br>
+	<br>
+	<br>
+	</div>
+
+{% endblock %}
