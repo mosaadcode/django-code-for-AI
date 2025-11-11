@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'student_affairs.apps.StudentAffairsConfig',
     'human_resources.apps.HumanResourcesConfig',
     'fis',
+    'academic_records',
 ]
 
 MIDDLEWARE = [
